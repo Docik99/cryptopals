@@ -56,7 +56,7 @@ def print_result(result):
 
 
 def main():
-    with open('4.txt', 'r', encoding='utf-8') as f:
+    with open('Files/ch_4.txt', 'r', encoding='utf-8') as f:
         strings = [bytes.fromhex(line.strip()) for line in f if line.strip()]
     results = brute_force(strings)
     print_result(results)
