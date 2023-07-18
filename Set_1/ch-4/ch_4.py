@@ -51,7 +51,8 @@ def brute_force(strings):
 
 
 def print_result(result):
-    print(f"{result['text'].decode().rstrip()}   Score: {int(result['score'])}    Key: {chr(result['key'])}")
+    print(
+        f"{result['text'].decode().rstrip()}   Score: {int(result['score'])}    Key: {chr(result['key'])}")
 
 
 def main():
