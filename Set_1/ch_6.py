@@ -1,17 +1,23 @@
 import bitarray
 
-first = bitarray.bitarray()
-first.frombytes('this is a test'.encode('utf-8'))
 
-sec = bitarray.bitarray()
-sec.frombytes('wokka wokka!!!'.encode('utf-8'))
+def hamming_distance():
+    first = bitarray.bitarray()
+    first.frombytes('this is a test'.encode('utf-8'))
+
+    sec = bitarray.bitarray()
+    sec.frombytes('wokka wokka!!!'.encode('utf-8'))
+
+    first ^= sec
+    i = 0
+    for bit in first:
+        i += bit
+    print(i)
 
 
-print(f"{first}\n{sec}")
+def main():
+    hamming_distance()
 
-first ^= sec
-print(first)
-i = 0
-for bit in first:
-    i += bit
-print(i)
+
+if __name__ == "__main__":
+    main()
