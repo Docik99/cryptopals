@@ -1,12 +1,12 @@
 import bitarray
 
 
-def hamming_distance():
+def hamming_distance(first_str, second_str):
     first = bitarray.bitarray()
-    first.frombytes('this is a test'.encode('utf-8'))
+    first.frombytes(first_str.encode('utf-8'))
 
     sec = bitarray.bitarray()
-    sec.frombytes('wokka wokka!!!'.encode('utf-8'))
+    sec.frombytes(second_str.encode('utf-8'))
 
     first ^= sec
     i = 0
@@ -16,7 +16,7 @@ def hamming_distance():
 
 
 def main():
-    hamming_distance()
+    hamming_distance('this is a test', 'wokka wokka!!!')
 
 
 if __name__ == "__main__":
