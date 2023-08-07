@@ -1,6 +1,8 @@
 import bitarray
 from base64 import b64decode
 
+import ch_4
+
 
 def hamming_distance(first_str, second_str):
     first = bitarray.bitarray()
@@ -32,17 +34,6 @@ def scoring_key_size(cipher_text):
     print(size_scores)
     print(sorted(size_scores, key=size_scores.get))
 
-
-def xor(text, key):
-    newtext = b''
-    i = 0
-
-    for byte in text:
-        newtext += bytes([byte ^ key[i]])
-
-        i = i + 1 if (i < len(key) - 1) else 0
-
-    return newtext.hex()
 
 
 def main():
