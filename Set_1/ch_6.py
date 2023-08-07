@@ -33,6 +33,18 @@ def scoring_key_size(cipher_text):
     print(sorted(size_scores, key=size_scores.get))
 
 
+def xor(text, key):
+    newtext = b''
+    i = 0
+
+    for byte in text:
+        newtext += bytes([byte ^ key[i]])
+
+        i = i + 1 if (i < len(key) - 1) else 0
+
+    return newtext.hex()
+
+
 def main():
     with open('Files/ch_6.txt', 'r', encoding='utf-8') as file:
         text = b64decode(file.read())
