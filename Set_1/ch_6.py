@@ -36,6 +36,7 @@ def scoring_key_size(cipher_text):
 
 
 
+
 def main():
     with open('Files/ch_6.txt', 'r', encoding='utf-8') as file:
         text = b64decode(file.read())
