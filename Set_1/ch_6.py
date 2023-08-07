@@ -18,6 +18,7 @@ def hamming_distance(first_str, second_str):
     return i
 
 
+
 def scoring_key_size(cipher_text):
     size_scores = {}
     score = 0
@@ -33,9 +34,6 @@ def scoring_key_size(cipher_text):
         size_scores[sizeKey] = score
     print(sorted(size_scores, key=size_scores.get))
     return sorted(size_scores, key=size_scores.get)
-
-\\\
-
 
 
 def main():
