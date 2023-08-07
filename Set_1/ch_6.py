@@ -34,7 +34,7 @@ def scoring_key_size(cipher_text):
     print(sorted(size_scores, key=size_scores.get))
     return sorted(size_scores, key=size_scores.get)
 
-\
+\\
 
 
 
