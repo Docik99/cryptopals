@@ -31,8 +31,8 @@ def scoring_key_size(cipher_text):
         score /= sizeKey
         score /= count_slices
         size_scores[sizeKey] = score
-    print(size_scores)
     print(sorted(size_scores, key=size_scores.get))
+    return sorted(size_scores, key=size_scores.get)
 
 
 
