@@ -19,6 +19,7 @@ def hamming_distance(first_str, second_str):
 
 
 
+
 def scoring_key_size(cipher_text):
     size_scores = {}
     score = 0
