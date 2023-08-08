@@ -52,7 +52,8 @@ def scoring_key_size(cipher_text):
             slice_1 = slice(i * sizeKey, (i + 1) * sizeKey)
             slice_2 = slice((i + 1) * sizeKey, (i + 2) * sizeKey)
 
-            score += hamming_distance(cipher_text[slice_1], cipher_text[slice_2])
+            score += hamming_distance(cipher_text[slice_1],
+                                      cipher_text[slice_2])
         score /= sizeKey
         score /= count_slices
         size_scores[sizeKey] = score
