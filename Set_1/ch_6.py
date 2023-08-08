@@ -1,4 +1,3 @@
-import bitarray
 from base64 import b64decode
 
 
@@ -21,6 +20,29 @@ def hamming_distance(first_str, second_str):
     return sum(bin(byte).count('1') for byte in xor(first_str, second_str))
 
 
+def xor(text, key):
+    output = b''
+    i = 0
+
+    for byte in text:
+        if isinstance(key, int):
+            output += bytes([byte ^ key])
+        else:
+            output += bytes([byte ^ key[i]])
+            i = i + 1 if (i < len(key) - 1) else 0
+
+    return output
+
+
+def scoring(input_bytes):
+    score = 0
+
+    for byte in input_bytes:
+        score += CHARACTER_FREQ.get(chr(byte).lower(), 0)
+
+    return score
+
+
 def scoring_key_size(cipher_text):
     size_scores = {}
     score = 0
@@ -37,29 +59,6 @@ def scoring_key_size(cipher_text):
     return sorted(size_scores, key=size_scores.get)[0]
 
 
-def scoring(input_bytes):
-    score = 0
-
-    for byte in input_bytes:
-        score += CHARACTER_FREQ.get(chr(byte).lower(), 0)
-
-    return score
-
-
-def xor(text, key):
-    output = b''
-    i = 0
-
-    for byte in text:
-        if isinstance(key, int):
-            output += bytes([byte ^ key])
-        else:
-            output += bytes([byte ^ key[i]])
-            i = i + 1 if (i < len(key) - 1) else 0
-
-    return output
-
-
 def brute_force_block(cipher_block):
     candidates = []
 
@@ -74,10 +73,12 @@ def brute_force_block(cipher_block):
 
 def brute_force(key_size, text):
     key = ""
+
     for i in range(key_size):
         block = text[i::key_size]
         part = brute_force_block(block)
         key += chr(part['key'])
+
     return key
 
 
