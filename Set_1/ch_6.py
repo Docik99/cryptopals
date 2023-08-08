@@ -18,17 +18,7 @@ CHARACTER_FREQ = {
 
 
 def hamming_distance(first_str, second_str):
-    first = bitarray.bitarray()
-    first.frombytes(first_str)
-
-    sec = bitarray.bitarray()
-    sec.frombytes(second_str)
-
-    first ^= sec
-    i = 0
-    for bit in first:
-        i += bit
-    return i
+    return sum(bin(byte).count('1') for byte in xor2(first_str, second_str))
 
 
 def scoring_key_size(cipher_text):
@@ -77,7 +67,7 @@ def xor2(text, key):
     return newtext
 
 
-def brute_force_key(cipher_block):
+def brute_force_block(cipher_block):
     candidates = []
 
     for candidate in range(256):
@@ -89,24 +79,23 @@ def brute_force_key(cipher_block):
     return sorted(candidates, key=lambda c: c['score'], reverse=True)[0]
 
 
-def get_blocks(key_size, text):
+def brute_force(key_size, text):
     key = ""
-    message = ""
     for i in range(key_size):
         block = text[i::key_size]
-        part = brute_force_key(block)
+        part = brute_force_block(block)
         key += chr(part['key'])
-        message += part['text'].decode()
-    print(key)
-
-    print(xor2(bytes(text), bytes(key.encode('utf-8'))))
+    return key
 
 
 def main():
     with open('Files/ch_6.txt', 'r', encoding='utf-8') as file:
         text = b64decode(file.read())
         key_size = scoring_key_size(text)
-        get_blocks(key_size, text)
+        key = brute_force(key_size, text)
+        result_text = xor2(bytes(text), bytes(key.encode('utf-8')))
+
+        print(f"KEY_VALUE: \"{key}\"\n\n{'-'*50}\n{result_text.decode('utf-8')}")
 
 
 if __name__ == "__main__":
