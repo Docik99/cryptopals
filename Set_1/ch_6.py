@@ -18,7 +18,7 @@ CHARACTER_FREQ = {
 
 
 def hamming_distance(first_str, second_str):
-    return sum(bin(byte).count('1') for byte in xor2(first_str, second_str))
+    return sum(bin(byte).count('1') for byte in xor(first_str, second_str))
 
 
 def scoring_key_size(cipher_text):
@@ -46,25 +46,18 @@ def scoring(input_bytes):
     return score
 
 
-def xor(input_bytes, key_value):
+def xor(text, key):
     output = b''
-
-    for char in input_bytes:
-        output += bytes([char ^ key_value])
-
-    return output
-
-
-def xor2(text, key):
-    newtext = b''
     i = 0
 
     for byte in text:
-        newtext += bytes([byte ^ key[i]])
+        if isinstance(key, int):
+            output += bytes([byte ^ key])
+        else:
+            output += bytes([byte ^ key[i]])
+            i = i + 1 if (i < len(key) - 1) else 0
 
-        i = i + 1 if (i < len(key) - 1) else 0
-
-    return newtext
+    return output
 
 
 def brute_force_block(cipher_block):
@@ -93,7 +86,7 @@ def main():
         text = b64decode(file.read())
         key_size = scoring_key_size(text)
         key = brute_force(key_size, text)
-        result_text = xor2(bytes(text), bytes(key.encode('utf-8')))
+        result_text = xor(bytes(text), bytes(key.encode('utf-8')))
 
         print(f"KEY_VALUE: \"{key}\"\n\n{'-'*50}\n{result_text.decode('utf-8')}")
 
