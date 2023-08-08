@@ -77,40 +77,29 @@ def xor2(text, key):
     return newtext
 
 
-def get_blocks(key_size, text):
-    key = ""
-    message = ""
-    for i in range(key_size):
-        block = text[i::key_size]
-        part = brute_force(block)
-        key += chr(part['key'])
-        message += part['text'].decode()
-    print(key)
-
-    result = ""
-    for i in range(key_size):
-        result += message[i::key_size]
-    #print(result)
-
-    print(xor2(bytes(text), bytes(key.encode('utf-8'))))
-
-
-def brute_force(cipher_block):
+def brute_force_key(cipher_block):
     candidates = []
 
     for candidate in range(256):
         text = xor(cipher_block, candidate)
         score = scoring(text)
-
-        result = {
-            'key': candidate,
-            'score': score,
-            'text': text
-        }
-
+        result = {'key': candidate, 'score': score}
         candidates.append(result)
 
     return sorted(candidates, key=lambda c: c['score'], reverse=True)[0]
+
+
+def get_blocks(key_size, text):
+    key = ""
+    message = ""
+    for i in range(key_size):
+        block = text[i::key_size]
+        part = brute_force_key(block)
+        key += chr(part['key'])
+        message += part['text'].decode()
+    print(key)
+
+    print(xor2(bytes(text), bytes(key.encode('utf-8'))))
 
 
 def main():
