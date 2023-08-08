@@ -1,7 +1,20 @@
 import bitarray
 from base64 import b64decode
 
-import ch_4
+
+CHARACTER_FREQ = {
+    'e': 12.6,
+    't': 9.37,
+    'a': 8.34,
+    'o': 7.7,
+    'n': 6.8,
+    'i': 6.71,
+    'h': 6.11,
+    's': 6.11,
+    'r': 5.68,
+    'l': 4.24,
+    'u': 2.85,
+    ' ': 15}
 
 
 def hamming_distance(first_str, second_str):
@@ -18,8 +31,6 @@ def hamming_distance(first_str, second_str):
     return i
 
 
-
-
 def scoring_key_size(cipher_text):
     size_scores = {}
     score = 0
@@ -33,14 +44,80 @@ def scoring_key_size(cipher_text):
         score /= sizeKey
         score /= count_slices
         size_scores[sizeKey] = score
-    print(sorted(size_scores, key=size_scores.get))
-    return sorted(size_scores, key=size_scores.get)
+    return sorted(size_scores, key=size_scores.get)[0]
+
+
+def scoring(input_bytes):
+    score = 0
+
+    for byte in input_bytes:
+        score += CHARACTER_FREQ.get(chr(byte).lower(), 0)
+
+    return score
+
+
+def xor(input_bytes, key_value):
+    output = b''
+
+    for char in input_bytes:
+        output += bytes([char ^ key_value])
+
+    return output
+
+
+def xor2(text, key):
+    newtext = b''
+    i = 0
+
+    for byte in text:
+        newtext += bytes([byte ^ key[i]])
+
+        i = i + 1 if (i < len(key) - 1) else 0
+
+    return newtext
+
+
+def get_blocks(key_size, text):
+    key = ""
+    message = ""
+    for i in range(key_size):
+        block = text[i::key_size]
+        part = brute_force(block)
+        key += chr(part['key'])
+        message += part['text'].decode()
+    print(key)
+
+    result = ""
+    for i in range(key_size):
+        result += message[i::key_size]
+    #print(result)
+
+    print(xor2(bytes(text), bytes(key.encode('utf-8'))))
+
+
+def brute_force(cipher_block):
+    candidates = []
+
+    for candidate in range(256):
+        text = xor(cipher_block, candidate)
+        score = scoring(text)
+
+        result = {
+            'key': candidate,
+            'score': score,
+            'text': text
+        }
+
+        candidates.append(result)
+
+    return sorted(candidates, key=lambda c: c['score'], reverse=True)[0]
 
 
 def main():
     with open('Files/ch_6.txt', 'r', encoding='utf-8') as file:
         text = b64decode(file.read())
-        scoring_key_size(text)
+        key_size = scoring_key_size(text)
+        get_blocks(key_size, text)
 
 
 if __name__ == "__main__":
